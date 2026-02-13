@@ -7,7 +7,7 @@
 
 USER RUNS:
 ──────────
-$ curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/ssh-panel/main/deploy.sh | sudo bash
+$ curl -sSL https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/deploy.sh | sudo bash
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

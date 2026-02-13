@@ -39,8 +39,8 @@ git init
 git add .
 git commit -m "Initial release - Complete SSH/VMess/Outline panel"
 
-# Add remote (replace YOUR_USERNAME)
-git remote add origin https://github.com/YOUR_USERNAME/ssh-panel.git
+# Add remote (replace yannaing86tt)
+git remote add origin https://github.com/yannaing86tt/ssh-panel.git
 
 # Push
 git branch -M main
@@ -53,12 +53,12 @@ After upload, edit `README.md` and `QUICKSTART.md`:
 
 **Replace:**
 ```
-https://raw.githubusercontent.com/YOUR_USERNAME/ssh-panel/main/deploy.sh
+https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/deploy.sh
 ```
 
 **With:**
 ```
-https://raw.githubusercontent.com/your-actual-username/ssh-panel/main/deploy.sh
+https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/deploy.sh
 ```
 
 ## Step 4: Test Installation
@@ -66,13 +66,13 @@ https://raw.githubusercontent.com/your-actual-username/ssh-panel/main/deploy.sh
 On a fresh VPS:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/ssh-panel/main/deploy.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/deploy.sh | sudo bash
 ```
 
 Or:
 
 ```bash
-wget https://raw.githubusercontent.com/YOUR_USERNAME/ssh-panel/main/deploy.sh
+wget https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/deploy.sh
 chmod +x deploy.sh
 sudo bash deploy.sh
 ```
@@ -126,7 +126,7 @@ your-username/ssh-panel/
 Users can install with:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/ssh-panel/main/deploy.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/deploy.sh | sudo bash
 ```
 
 This will:
@@ -160,13 +160,13 @@ Check:
 After upload, share this link:
 
 ```
-https://github.com/YOUR_USERNAME/ssh-panel
+https://github.com/yannaing86tt/ssh-panel
 ```
 
 Users can clone with:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ssh-panel.git
+git clone https://github.com/yannaing86tt/ssh-panel.git
 cd ssh-panel
 sudo bash deploy.sh
 ```

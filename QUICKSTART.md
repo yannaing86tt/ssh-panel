@@ -13,7 +13,7 @@ TTL: 300
 
 ### 2. Run installer
 ```bash
-wget https://raw.githubusercontent.com/YOUR_USERNAME/ssh-panel/main/deploy.sh
+wget https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/deploy.sh
 chmod +x deploy.sh
 sudo bash deploy.sh
 ```
@@ -105,6 +105,6 @@ systemctl restart ssh-panel
 
 ## Support
 
-- GitHub Issues: https://github.com/YOUR_USERNAME/ssh-panel/issues
+- GitHub Issues: https://github.com/yannaing86tt/ssh-panel/issues
 - Documentation: See README.md
 - Credentials: /root/panel-credentials.txt

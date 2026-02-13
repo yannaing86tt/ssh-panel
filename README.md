@@ -48,14 +48,14 @@ Complete SSH/VMess/Outline VPN management panel with web interface.
 ### One-Command Installation
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/ssh-panel/main/deploy.sh | bash
+curl -sSL https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/deploy.sh | bash
 ```
 
 ### Manual Installation
 
 1. **Download installer:**
 ```bash
-wget https://raw.githubusercontent.com/YOUR_USERNAME/ssh-panel/main/deploy.sh
+wget https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/deploy.sh
 chmod +x deploy.sh
 ```
 
@@ -357,8 +357,8 @@ systemctl daemon-reload
 ## Support
 
 For issues, questions, or contributions:
-- GitHub Issues: https://github.com/YOUR_USERNAME/ssh-panel/issues
-- Documentation: https://github.com/YOUR_USERNAME/ssh-panel/wiki
+- GitHub Issues: https://github.com/yannaing86tt/ssh-panel/issues
+- Documentation: https://github.com/yannaing86tt/ssh-panel/wiki
 
 ## License
 
