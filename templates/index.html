@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SSH Panel{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body">
+                <h6 class="text-white-50">SSH Users</h6>
+                <h2 class="mb-0">{{ total_users }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body">
+                <h6 class="text-white-50">Active Connections</h6>
+                <h2 class="mb-0">{{ active_connections }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body">
+                <h6 class="text-white-50">CPU Usage</h6>
+                <h2 class="mb-0">{{ "%.1f"|format(system.cpu) }}%</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body">
+                <h6 class="text-white-50">Memory Usage</h6>
+                <h2 class="mb-0">{{ "%.1f"|format(system.memory_used) }}%</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-4">
+                    <i class="bi bi-cpu"></i> System Resources
+                </h5>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>CPU</small>
+                        <small>{{ "%.1f"|format(system.cpu) }}%</small>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-info" style="width: {{ system.cpu }}%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>Memory</small>
+                        <small>{{ "%.1f"|format(system.memory_used) }}% of {{ "%.1f"|format(system.memory_total) }} GB</small>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-warning" style="width: {{ system.memory_used }}%"></div>
+                    </div>
+                </div>
+                <div class="mb-0">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>Disk</small>
+                        <small>{{ "%.1f"|format(system.disk_used) }}% of {{ "%.1f"|format(system.disk_total) }} GB</small>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-danger" style="width: {{ system.disk_used }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-4">
+                    <i class="bi bi-lightning"></i> Quick Actions
+                </h5>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="{{ url_for('create_user') }}" class="btn btn-primary w-100 py-3">
+                            <i class="bi bi-person-plus fs-4 d-block mb-2"></i>
+                            <small>Create SSH User</small>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ url_for('vmess_create') }}" class="btn btn-success w-100 py-3">
+                            <i class="bi bi-plus-circle fs-4 d-block mb-2"></i>
+                            <small>Create VMess</small>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ url_for('users') }}" class="btn btn-secondary w-100 py-3">
+                            <i class="bi bi-people fs-4 d-block mb-2"></i>
+                            <small>SSH Users</small>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ url_for('vmess_list') }}" class="btn btn-info w-100 py-3">
+                            <i class="bi bi-hdd-network fs-4 d-block mb-2"></i>
+                            <small>VMess Users</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-refresh every 10 seconds
+setTimeout(() => location.reload(), 10000);
+</script>
+{% endblock %}

@@ -1,0 +1,209 @@
+╔════════════════════════════════════════════════════════════╗
+║           INSTALLATION PREVIEW                             ║
+║      What users will see when running installer           ║
+╚════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+USER RUNS:
+──────────
+$ curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/ssh-panel/main/deploy.sh | sudo bash
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+INSTALLER OUTPUT:
+─────────────────
+
+╔════════════════════════════════════════════╗
+║   SSH Panel Auto-Deployment v2.0           ║
+╚════════════════════════════════════════════╝
+
+Enter domain name (e.g., ssh.example.com): ssh.myserver.com
+Installing SSH Panel for: ssh.myserver.com
+
+Server IP: 159.89.197.67
+
+Make sure DNS is pointing ssh.myserver.com → 159.89.197.67
+Press Enter to continue...
+
+[1/15] Installing system packages...
+[2/15] Creating directory structure...
+[3/15] Generating admin credentials...
+[4/15] Installing Python dependencies...
+[5/15] Extracting application files...
+[6/15] Installing Xray-core...
+[7/15] Initializing database...
+[8/15] Creating systemd service...
+[9/15] Configuring Nginx...
+[10/15] Installing SSL certificate...
+[11/15] Configuring firewall...
+[12/15] Setting script permissions...
+[13/15] Configuring default settings...
+[14/15] Starting services...
+[15/15] Verifying installation...
+
+╔════════════════════════════════════════════╗
+║       Installation Complete! ✅            ║
+╚════════════════════════════════════════════╝
+
+Panel URL:      https://ssh.myserver.com
+Admin Username: admin_a3f921
+Admin Password: xK9mP2vL5nQ8wR4tY7uZ1A==
+Server IP:      159.89.197.67
+
+Services Status:
+  Panel:  active
+  Nginx:  active
+  Xray:   active
+
+Credentials saved to: /root/panel-credentials.txt
+
+Next Steps:
+1. Access panel: https://ssh.myserver.com
+2. Login with credentials above
+3. Create SSH/VMess/Outline users
+
+Documentation: /opt/ssh-panel/README.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT GETS INSTALLED:
+────────────────────
+
+System Packages:
+  ✅ Python 3.x + venv
+  ✅ Nginx 1.18+
+  ✅ Certbot (Let's Encrypt)
+  ✅ Shadowsocks-libev 3.3.5+
+  ✅ UFW firewall
+  ✅ Git, curl, net-tools
+
+Software:
+  ✅ Flask 3.0.0 (web framework)
+  ✅ Xray-core 1.8.16 (VMess)
+  ✅ Gunicorn 21.2.0 (WSGI server)
+  ✅ SQLAlchemy (database ORM)
+
+Services Created:
+  ✅ ssh-panel.service (Gunicorn + Flask)
+  ✅ xray.service (VMess VPN)
+  ✅ nginx.service (reverse proxy)
+  ✅ certbot.timer (SSL auto-renewal)
+
+Firewall Ports Opened:
+  ✅ 22/tcp (SSH)
+  ✅ 80/tcp (HTTP)
+  ✅ 443/tcp (HTTPS)
+  ✅ 8388-8395/tcp+udp (Shadowsocks)
+
+Files Created:
+  ✅ /opt/ssh-panel/app.py
+  ✅ /opt/ssh-panel/models.py
+  ✅ /opt/ssh-panel/scripts/*.sh
+  ✅ /opt/ssh-panel/templates/*.html
+  ✅ /opt/ssh-panel/instance/ssh_panel.db
+  ✅ /opt/ssh-panel/.env (credentials)
+  ✅ /etc/systemd/system/ssh-panel.service
+  ✅ /etc/nginx/sites-available/ssh-panel
+  ✅ /usr/local/etc/xray/config.json
+
+SSL Certificate:
+  ✅ /etc/letsencrypt/live/DOMAIN/fullchain.pem
+  ✅ /etc/letsencrypt/live/DOMAIN/privkey.pem
+  ✅ Auto-renewal enabled (certbot.timer)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AFTER INSTALLATION:
+───────────────────
+
+User accesses: https://ssh.myserver.com
+
+LOGIN SCREEN:
+┌─────────────────────────────────┐
+│      SSH Management Panel       │
+│                                 │
+│  Username: [admin_a3f921  ]    │
+│  Password: [************  ]    │
+│                                 │
+│         [ Login ]               │
+└─────────────────────────────────┘
+
+DASHBOARD:
+┌─────────────────────────────────────────┐
+│  SSH Management Panel                   │
+│                                         │
+│  System Status:                         │
+│    CPU: 5.2%   Memory: 42%   Disk: 12%│
+│                                         │
+│  Quick Actions:                         │
+│  [Create SSH User] [Create VMess User]  │
+│                                         │
+│  Menu:                                  │
+│  • Dashboard                            │
+│  • SSH Users                            │
+│  • Outline Users                        │
+│  • VMess Users                          │
+│  • Create VMess                         │
+│  • VMess Settings                       │
+│  • SSH Banner                           │
+└─────────────────────────────────────────┘
+
+CREATE SSH USER:
+┌─────────────────────────────────────────┐
+│  Create SSH User                        │
+│                                         │
+│  Username: [testuser       ]           │
+│  Password: [secure123      ]           │
+│  Expiry Days: [30          ]           │
+│  Max Connections: [2       ]           │
+│                                         │
+│         [ Create User ]                 │
+└─────────────────────────────────────────┘
+
+After creation → Download config or Scan QR code
+
+CREATE VMESS USER:
+┌─────────────────────────────────────────┐
+│  Create VMess User                      │
+│                                         │
+│  Name: [MyVPN          ]               │
+│  Data Limit (GB): [10  ]               │
+│  Expiry Days: [30      ]               │
+│                                         │
+│         [ Create User ]                 │
+└─────────────────────────────────────────┘
+
+After creation → Click "Generate Link" or scan QR
+
+CREATE OUTLINE USER:
+┌─────────────────────────────────────────┐
+│  Create Outline User                    │
+│                                         │
+│  Name: [OutlineVPN     ]               │
+│  Data Limit (GB): [10  ]               │
+│                                         │
+│         [ Create User ]                 │
+└─────────────────────────────────────────┘
+
+After creation:
+  ✅ Shadowsocks server auto-starts
+  ✅ Port auto-assigned (8388, 8389, etc.)
+  ✅ Access key ready immediately
+  ✅ Click "Get Key" or scan QR
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOTAL INSTALLATION TIME: 2-3 minutes
+
+REQUIREMENTS:
+  • Fresh Ubuntu 20.04+ or Debian 11+ VPS
+  • 1GB RAM minimum (2GB recommended)
+  • Public IP address
+  • Domain pointed to IP (A record)
+  • Root access (sudo)
+
+NO MANUAL CONFIGURATION NEEDED!
+Everything is automatic! 🎉
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

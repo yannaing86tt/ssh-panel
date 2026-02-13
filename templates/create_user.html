@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Create User - SSH Panel{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Create SSH User</h2>
+    <a href="{{ url_for('users') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Users
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" 
+                               pattern="[a-zA-Z0-9_]+" required>
+                        <div class="form-text">Alphanumeric characters and underscore only</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="text" name="password" class="form-control" 
+                               id="password" required>
+                        <button type="button" class="btn btn-sm btn-secondary mt-2" 
+                                onclick="generatePassword()">
+                            <i class="bi bi-key"></i> Generate Random
+                        </button>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Expiry (Days)</label>
+                        <input type="number" name="days" class="form-control" 
+                               value="30" min="1" max="365" required>
+                        <div class="form-text">Account will expire after this many days</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Max Connections</label>
+                        <input type="number" name="max_connections" class="form-control" 
+                               value="2" min="1" max="100" required>
+                        <div class="form-text">Maximum simultaneous connections allowed (1-100)</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Notes (Optional)</label>
+                        <textarea name="notes" class="form-control" rows="3" 
+                                  placeholder="Internal notes about this user"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-person-plus"></i> Create User
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-info-circle"></i> User Creation
+                </h5>
+                <p class="small">
+                    Creating a user will:
+                </p>
+                <ul class="small">
+                    <li>Create a system SSH account</li>
+                    <li>Set password authentication</li>
+                    <li>Set expiry date automatically</li>
+                    <li>Limit concurrent connections</li>
+                    <li>Add to panel database</li>
+                </ul>
+                <hr>
+                <p class="small mb-0">
+                    <strong>Tip:</strong> Use strong passwords and reasonable expiry dates for security.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function generatePassword() {
+    const length = 12;
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    let password = "";
+    for (let i = 0; i < length; i++) {
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    document.getElementById('password').value = password;
+}
+</script>
+{% endblock %}
