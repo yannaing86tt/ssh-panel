@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}SSH Users - SSH Panel{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">SSH Users</h2>
+    <a href="{{ url_for('create_user') }}" class="btn btn-primary">
+        <i class="bi bi-person-plus"></i> Create
+    </a>
+</div>
+
+{% if users %}
+<div class="row g-3">
+    {% for user in users %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="mb-1">{{ user.username }}</h5>
+                        <small class="text-muted">
+                            Created: {{ user.created_at.strftime('%Y-%m-%d') }}
+                        </small>
+                    </div>
+                    <div>
+                        {% if user.is_online %}
+                        <span class="badge bg-success">
+                            <i class="bi bi-circle-fill"></i> Online
+                        </span>
+                        {% else %}
+                        <span class="badge bg-secondary">
+                            <i class="bi bi-circle"></i> Offline
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <small class="text-muted d-block">Password</small>
+                        <div class="d-flex align-items-center">
+                            <code class="flex-grow-1 small">{{ user.password }}</code>
+                            <button class="btn btn-sm btn-outline-light ms-1" onclick="copyText('{{ user.password }}')">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted d-block">Connections</small>
+                        <strong class="text-info">{{ user.device_count }} / {{ user.max_connections }}</strong>
+                    </div>
+                </div>
+                
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <small class="text-muted d-block">Expires</small>
+                        <strong>{{ user.expiry_date.strftime('%Y-%m-%d') }}</strong>
+                        <div><small class="text-warning">{{ user.days_remaining() }} days left</small></div>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted d-block">Status</small>
+                        {% if user.is_expired %}
+                        <span class="badge bg-danger">Expired</span>
+                        {% elif user.days_remaining() <= 3 %}
+                        <span class="badge bg-warning">Expiring Soon</span>
+                        {% else %}
+                        <span class="badge bg-success">Active</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex">
+                    <button class="btn btn-info btn-sm flex-grow-1" onclick="showSSHConfig('{{ user.username }}', '{{ user.password }}')">
+                        <i class="bi bi-file-text"></i> Config
+                    </button>
+                    <a href="{{ url_for('generate_qr', username=user.username) }}" class="btn btn-success btn-sm flex-grow-1" target="_blank">
+                        <i class="bi bi-qr-code"></i> QR
+                    </a>
+                    <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" 
+                          onsubmit="return confirm('Delete {{ user.username }}?')" style="display: inline;" class="flex-grow-1">
+                        <button type="submit" class="btn btn-danger btn-sm w-100">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> No SSH users yet.
+    <a href="{{ url_for('create_user') }}" class="alert-link">Create your first user</a>
+</div>
+{% endif %}
+
+<!-- SSH Config Modal -->
+<div class="modal fade" id="configModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">SSH Configuration</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control font-monospace" id="sshUsername" readonly>
+                        <button class="btn btn-outline-light" onclick="copyFromInput('sshUsername')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control font-monospace" id="sshPassword" readonly>
+                        <button class="btn btn-outline-light" onclick="copyFromInput('sshPassword')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Server</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control font-monospace" id="sshServer" value="ssh.thunnwathanlin.codes" readonly>
+                        <button class="btn btn-outline-light" onclick="copyFromInput('sshServer')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-0">
+                    <label class="form-label">Port</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control font-monospace" value="22" readonly>
+                        <button class="btn btn-outline-light" onclick="copyText('22')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Copied!');
+    });
+}
+
+function copyFromInput(elementId) {
+    const input = document.getElementById(elementId);
+    input.select();
+    document.execCommand('copy');
+    alert('Copied!');
+}
+
+function showSSHConfig(username, password) {
+    document.getElementById('sshUsername').value = username;
+    document.getElementById('sshPassword').value = password;
+    new bootstrap.Modal(document.getElementById('configModal')).show();
+}
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-refresh every 5 seconds
+setTimeout(() => location.reload(), 5000);
+</script>
+{% endblock %}

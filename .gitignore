@@ -1,0 +1,47 @@
+# SSH Panel v5 - Git Ignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+instance/
+*.db
+*.sqlite3
+
+# Flask
+.flask_session/
+.webassets-cache
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Sensitive
+*.pem
+*.key
+*credentials.txt
+.env
+
+# Temporary
+*.tmp
+*.bak
+*.backup
+.cache/

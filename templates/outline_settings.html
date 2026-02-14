@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Outline Settings - SSH Panel{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Outline VPN Settings</h2>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-4">
+                    <i class="bi bi-gear"></i> Server Configuration
+                </h5>
+                <form method="POST">
+                    <div class="mb-4">
+                        <label class="form-label">Server Address</label>
+                        <input type="text" name="address" class="form-control" 
+                               value="{{ address }}" required>
+                        <div class="form-text">
+                            VPS domain or IP address
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-save"></i> Save Settings
+                        </button>
+                        <a href="{{ url_for('outline_users') }}" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-arrow-left"></i> Back to Users
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">
+                    <i class="bi bi-info-circle"></i> Current Configuration
+                </h5>
+                
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="p-3 bg-dark rounded">
+                            <small class="text-muted d-block mb-1">Server Address</small>
+                            <code class="text-info">{{ address }}</code>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-dark rounded">
+                            <small class="text-muted d-block mb-1">Protocol</small>
+                            <strong class="text-info">Shadowsocks</strong>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-dark rounded">
+                            <small class="text-muted d-block mb-1">Method</small>
+                            <code class="text-info">chacha20-ietf-poly1305</code>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-dark rounded">
+                            <small class="text-muted d-block mb-1">Port Range</small>
+                            <strong class="text-info">8388+</strong>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-dark rounded">
+                            <small class="text-muted d-block mb-1">Format</small>
+                            <strong class="text-info">ss:// URI</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-info-circle"></i> About Outline
+                </h5>
+                <p class="small mb-2">
+                    Outline VPN uses Shadowsocks protocol for secure internet access.
+                </p>
+                <ul class="small mb-0">
+                    <li>Strong encryption (ChaCha20)</li>
+                    <li>Easy to use</li>
+                    <li>Cross-platform support</li>
+                    <li>Automatic key generation</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-lightbulb"></i> Tips
+                </h5>
+                <ul class="small mb-0">
+                    <li>Each user gets unique port</li>
+                    <li>Access keys auto-generated</li>
+                    <li>Scan QR code to connect</li>
+                    <li>Data limits tracked per user</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

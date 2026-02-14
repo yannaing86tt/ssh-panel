@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}VMess Settings - SSH Panel{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">VMess Settings</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title mb-4">
+            <i class="bi bi-gear"></i> Server Configuration
+        </h5>
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Server Address</label>
+                <input type="text" name="address" class="form-control" 
+                       value="{{ address }}" required>
+                <div class="form-text">
+                    VPS domain or IP address
+                </div>
+            </div>
+            
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label class="form-label">Port</label>
+                    <select name="port" class="form-select">
+                        <option value="80" {% if port == '80' %}selected{% endif %}>80 (HTTP)</option>
+                        <option value="443" {% if port == '443' %}selected{% endif %}>443 (HTTPS)</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">TLS</label>
+                    <select name="tls" class="form-select">
+                        <option value="none" {% if tls == 'none' %}selected{% endif %}>None</option>
+                        <option value="tls" {% if tls == 'tls' %}selected{% endif %}>TLS</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label">WS Host (Optional)</label>
+                <input type="text" name="host" class="form-control" 
+                       value="{{ host }}" placeholder="portal-as.ruijienetworks.com">
+                <div class="form-text">
+                    Host header for SNI/CDN
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-save"></i> Save Settings
+                </button>
+                <a href="{{ url_for('vmess_create') }}" class="btn btn-success btn-lg">
+                    <i class="bi bi-plus-circle"></i> Create User
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title mb-3">
+            <i class="bi bi-info-circle"></i> Current Configuration
+        </h5>
+        
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="p-3 bg-dark rounded">
+                    <small class="text-muted d-block mb-1">Server Address</small>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <code class="text-info">{{ address }}</code>
+                        <button class="btn btn-sm btn-outline-light" onclick="copyText('{{ address }}')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div class="p-3 bg-dark rounded">
+                    <small class="text-muted d-block mb-1">Port</small>
+                    <strong class="text-info">{{ port }}</strong>
+                    {% if port == '443' %}
+                    <span class="badge bg-success ms-1">Secure</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div class="p-3 bg-dark rounded">
+                    <small class="text-muted d-block mb-1">TLS</small>
+                    <strong class="text-info">{{ tls }}</strong>
+                </div>
+            </div>
+            
+            <div class="col-12">
+                <div class="p-3 bg-dark rounded">
+                    <small class="text-muted d-block mb-1">WS Host</small>
+                    <code class="text-info">{{ host or 'Same as server' }}</code>
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div class="p-3 bg-dark rounded">
+                    <small class="text-muted d-block mb-1">Path</small>
+                    <code class="text-info">/ws</code>
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div class="p-3 bg-dark rounded">
+                    <small class="text-muted d-block mb-1">Network</small>
+                    <strong class="text-info">WebSocket</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h6 class="card-title">
+            <i class="bi bi-lightbulb"></i> Recommended Setup
+        </h6>
+        <div class="alert alert-success mb-2">
+            <strong>HTTPS (Secure):</strong>
+            <ul class="small mb-0 mt-1">
+                <li>Port: 443</li>
+                <li>TLS: tls</li>
+                <li>More secure ✅</li>
+            </ul>
+        </div>
+        <div class="alert alert-warning mb-0">
+            <strong>HTTP (Fallback):</strong>
+            <ul class="small mb-0 mt-1">
+                <li>Port: 80</li>
+                <li>TLS: none</li>
+                <li>No SSL needed</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Copied!');
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}SSH Banner - SSH Panel{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">SSH Banner Configuration</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Edit SSH Banner</h5>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Banner Text</label>
+                        <textarea name="banner_text" class="form-control font-monospace" rows="12" placeholder="Enter your SSH banner text...">{{ current_banner }}</textarea>
+                        <div class="form-text">
+                            This banner will be displayed to users when they connect via SSH.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Save Banner
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Preview</h5>
+                <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap;">{{ current_banner or 'No banner configured yet' }}</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-palette"></i> ANSI Color Codes
+                </h5>
+                <p class="small">Use ANSI escape codes for colors:</p>
+                <div class="table-responsive">
+                    <table class="table table-sm small">
+                        <thead>
+                            <tr>
+                                <th>Color</th>
+                                <th>Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Reset</td><td>\033[0m</td></tr>
+                            <tr><td style="color: red;">Red</td><td>\033[31m</td></tr>
+                            <tr><td style="color: green;">Green</td><td>\033[32m</td></tr>
+                            <tr><td style="color: yellow;">Yellow</td><td>\033[33m</td></tr>
+                            <tr><td style="color: blue;">Blue</td><td>\033[34m</td></tr>
+                            <tr><td style="color: magenta;">Magenta</td><td>\033[35m</td></tr>
+                            <tr><td style="color: cyan;">Cyan</td><td>\033[36m</td></tr>
+                            <tr><td>Bold</td><td>\033[1m</td></tr>
+                            <tr><td>Underline</td><td>\033[4m</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-lightbulb"></i> Example Banner
+                </h5>
+                <pre class="small bg-secondary p-2 rounded text-white" style="font-size: 0.75rem; white-space: pre-wrap;">\033[1;32m
+╔════════════════════════════╗
+║   WELCOME TO SSH SERVER    ║
+╚════════════════════════════╝
+\033[0m
+
+\033[1;33m⚠️  WARNING: Authorized Access Only\033[0m
+
+\033[36mServer: ssh.thunnwathanlin.codes
+Status: \033[1;32mOnline\033[0m
+</pre>
+                <button class="btn btn-sm btn-outline-light w-100" onclick="copyExample()">
+                    <i class="bi bi-clipboard"></i> Copy Example
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyExample() {
+    const example = `\\033[1;32m
+╔════════════════════════════╗
+║   WELCOME TO SSH SERVER    ║
+╚════════════════════════════╝
+\\033[0m
+
+\\033[1;33m⚠️  WARNING: Authorized Access Only\\033[0m
+
+\\033[36mServer: ssh.thunnwathanlin.codes
+Status: \\033[1;32mOnline\\033[0m`;
+    
+    navigator.clipboard.writeText(example).then(() => {
+        alert('Example copied to clipboard!');
+    });
+}
+</script>
+{% endblock %}
