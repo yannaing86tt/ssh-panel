@@ -80,18 +80,22 @@ print_success "Xray installed"
 
 print_header "Setting Up Panel Application"
 
-# Create directory
+# Get script directory FIRST (before changing directory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Create panel directory
 PANEL_DIR="/opt/ssh-panel"
 mkdir -p $PANEL_DIR
-cd $PANEL_DIR
 
-# Copy files (assuming script is run from package directory)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Copy application files
 cp $SCRIPT_DIR/app.py $PANEL_DIR/
 cp $SCRIPT_DIR/models.py $PANEL_DIR/
 cp $SCRIPT_DIR/requirements.txt $PANEL_DIR/
 cp -r $SCRIPT_DIR/templates $PANEL_DIR/
 mkdir -p $PANEL_DIR/static
+
+# Change to panel directory for setup
+cd $PANEL_DIR
 
 # Create virtual environment
 python3 -m venv venv
