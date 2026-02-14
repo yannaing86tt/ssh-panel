@@ -9,6 +9,9 @@
 set -e
 
 # Colors
+
+# Auto-detect domain
+DOMAIN="panel-$(hostname -I | awk '{print $1}' | tr . -).local"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -46,12 +49,7 @@ print_header "SSH Panel v5 Installer"
 
 # Get domain
 echo -e "${YELLOW}Enter your domain (e.g., ssh.example.com):${NC}"
-read -p "Domain: " DOMAIN
 
-if [ -z "$DOMAIN" ]; then
-    print_error "Domain is required!"
-    exit 1
-fi
 
 
 print_header "Installing System Dependencies"
