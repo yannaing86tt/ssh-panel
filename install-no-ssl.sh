@@ -153,7 +153,12 @@ with app.app_context():
     # Save to file
     with open('/root/ssh-panel-credentials.txt', 'w') as f:
         f.write(f"SSH Panel Admin Credentials\n")
-        f.write(f"Domain: https://$DOMAIN\n")
+        import urllib.request
+        try:
+            ip = urllib.request.urlopen('https://api.ipify.org').read().decode('utf8')
+        except:
+            ip = "YOUR_VPS_IP"
+        f.write(f"Panel URL: http://{ip}\n")
         f.write(f"Username: {admin_user}\n")
         f.write(f"Password: {admin_pass}\n")
 PYINIT
@@ -299,7 +304,7 @@ print_header "Installation Complete!"
 cat /root/ssh-panel-credentials.txt
 
 echo ""
-print_success "Panel URL: https://$DOMAIN"
+print_success "Panel URL: http://$(curl -s ifconfig.me)"
 print_success "Credentials saved: /root/ssh-panel-credentials.txt"
 echo ""
 print_warning "Features:"
