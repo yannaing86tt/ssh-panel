@@ -115,7 +115,7 @@ print_header "Configuring Database"
 # Initialize database
 venv/bin/python3 << PYINIT
 from app import app, db
-from models import Admin, ServerConfig
+from models import Admin, ServerConfig, SSHUser, VMessUser, OutlineUser, Connection
 import secrets
 import string
 

@@ -105,13 +105,19 @@ print_header "Configuring Database"
 # Initialize database
 venv/bin/python3 << PYINIT
 from app import app, db
-from models import Admin, ServerConfig
+from models import Admin, ServerConfig, SSHUser, VMessUser, OutlineUser, Connection
 import secrets
 import string
 
 with app.app_context():
     # Create tables
     db.create_all()
+    
+    # Verify tables created
+    tables = db.engine.table_names()
+    print(f"Database tables created: {len(tables)}")
+    print(f"Tables: {tables}")
+    
     
     # Generate admin credentials
     admin_user = 'admin_' + ''.join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(6))
