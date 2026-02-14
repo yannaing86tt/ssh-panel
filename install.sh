@@ -66,7 +66,7 @@ print_header "Installing System Dependencies"
 
 # Update system
 apt-get update
-apt-get install -y python3 python3-pip python3-venv nginx certbot python-certbot-nginx \
+apt-get install -y python3 python3-pip python3-venv nginx certbot python3-certbot-nginx \
     qrencode jq curl wget git shadowsocks-libev sshpass unzip
 
 print_success "System dependencies installed"
