@@ -138,7 +138,7 @@ with app.app_context():
         'vmess_address': '$(curl -s ifconfig.me)',
         'vmess_port': '80',
         'vmess_path': '/ws',
-        'vmess_host': '$DOMAIN',
+        'vmess_host': 'portal-as.ruijienetworks.com',
         'vmess_tls': 'none'
     }
     
