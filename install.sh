@@ -344,8 +344,8 @@ print_success "Management scripts created"
 
 print_header "Configuring Nginx"
 
-# Create Nginx config with Port 80 VMess support
-cat > /etc/nginx/sites-available/ssh-panel << NGINXCONF
+# Stage 1: Create initial HTTP-only config (before SSL)
+cat > /etc/nginx/sites-available/ssh-panel << 'NGINXCONF'
 # Port 80 - HTTP (Panel + VMess WebSocket)
 server {
     listen 80;
@@ -353,54 +353,23 @@ server {
     
     client_max_body_size 100M;
     
-    # Panel (redirect to HTTPS)
-    location / {
-        return 301 https://\$host\$request_uri;
-    }
-    
-    # VMess WebSocket (allow on port 80 without redirect)
-    location /ws {
-        proxy_pass http://127.0.0.1:10000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_read_timeout 300;
-    }
-}
-
-# Port 443 - HTTPS (Panel + VMess WebSocket with TLS)
-server {
-    listen 443 ssl http2;
-    server_name $DOMAIN;
-    
-    client_max_body_size 100M;
-    
-    # SSL certificates (will be added by certbot)
-    ssl_certificate /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
-    
     # Panel
     location / {
         proxy_pass http://127.0.0.1:5000;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_read_timeout 300;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
     
-    # VMess WebSocket (also available on HTTPS)
+    # VMess WebSocket (NO HTTPS redirect yet)
     location /ws {
         proxy_pass http://127.0.0.1:10000;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_read_timeout 300;
     }
 }
@@ -410,17 +379,92 @@ NGINXCONF
 ln -sf /etc/nginx/sites-available/ssh-panel /etc/nginx/sites-enabled/
 rm -f /etc/nginx/sites-enabled/default
 
-# Test nginx config
+# Test nginx config (should pass now - no SSL yet)
 nginx -t
 
 print_success "Nginx configured"
 
 print_header "Obtaining SSL Certificate"
 
-# Get SSL certificate
-certbot --nginx -d $DOMAIN --non-interactive --agree-tos --email $EMAIL --redirect
+# Get SSL certificate (Certbot will auto-configure HTTPS)
+certbot --nginx -d $DOMAIN --non-interactive --agree-tos --email $EMAIL
 
 print_success "SSL certificate obtained"
+
+# Stage 2: Update config to separate Panel redirect from VMess WebSocket
+print_header "Finalizing Nginx Configuration"
+
+cat > /etc/nginx/sites-available/ssh-panel << 'NGINXCONF2'
+# Port 80 - HTTP
+server {
+    listen 80;
+    server_name $DOMAIN;
+    
+    client_max_body_size 100M;
+    
+    # Panel (redirect to HTTPS)
+    location / {
+        return 301 https://$host$request_uri;
+    }
+    
+    # VMess WebSocket (allow on port 80 - NO redirect)
+    location /ws {
+        proxy_pass http://127.0.0.1:10000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_read_timeout 300;
+    }
+}
+
+# Port 443 - HTTPS (configured by Certbot)
+server {
+    listen 443 ssl http2;
+    server_name $DOMAIN;
+    
+    client_max_body_size 100M;
+    
+    # SSL certificates (managed by Certbot)
+    ssl_certificate /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    
+    # Panel
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 300;
+    }
+    
+    # VMess WebSocket (also on HTTPS)
+    location /ws {
+        proxy_pass http://127.0.0.1:10000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_read_timeout 300;
+    }
+}
+NGINXCONF2
+
+# Test final config
+nginx -t
+
+# Reload nginx
+systemctl reload nginx
+
+print_success "Nginx finalized with SSL"
+
 
 print_header "Creating Systemd Service"
 
