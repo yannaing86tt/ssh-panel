@@ -107,6 +107,9 @@ pip install -r requirements.txt
 
 print_success "Panel application set up"
 
+# Create instance directory for database
+mkdir -p instance
+
 print_header "Configuring Database"
 
 # Initialize database
