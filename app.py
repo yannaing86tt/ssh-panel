@@ -665,8 +665,7 @@ def outline_users():
         # Auto-start Shadowsocks server
         try:
             result = subprocess.run(
-                ['/opt/ssh-panel/scripts/start_outline_server.sh', 
-                 str(user.port), user.password, user.method],
+                ['/opt/ssh-panel/scripts/start_outline_server.sh', name, user.password, str(user.port)],
                 capture_output=True, text=True, timeout=15
             )
             if result.returncode == 0:
