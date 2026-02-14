@@ -67,18 +67,23 @@ for user in all_users:
 
 ### Quick Install
 
-```bash
-# Download package
-wget https://[YOUR_URL]/ssh-panel-v5.tar.gz
-tar -xzf ssh-panel-v5.tar.gz
-cd ssh-panel-v5
+**One-line installation (recommended):**
 
-# Run installer
-chmod +x install.sh
-./install.sh
+```bash
+curl -sL https://raw.githubusercontent.com/yannaing86tt/ssh-panel/main/install-no-ssl.sh | bash
 ```
 
-During installation you'll be asked for:
+**Alternative - Git clone:**
+
+```bash
+git clone https://github.com/yannaing86tt/ssh-panel.git
+cd ssh-panel
+bash install-no-ssl.sh
+```
+
+**Installation takes 5-7 minutes. Zero prompts, fully automatic!**
+
+After installation:
 - Domain name (e.g., ssh.example.com)
 - Email for SSL certificate
 
